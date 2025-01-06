@@ -315,6 +315,24 @@
               </t-form-item>
             </t-tab-panel>
 
+            <t-tab-panel :value="5">
+              <template #label>
+                {{$t('page.host.tab_password')}}
+              </template>
+              <t-form-item :label="$t('page.host.is_enable_http_auth_base')" name="is_enable_http_auth_base">
+                <t-tooltip class="placement top center" :content="$t('page.host.is_enable_http_auth_base_tips')" placement="top"
+                           :overlay-style="{ width: '200px' }" show-arrow>
+                  <t-radio-group v-model="formData.is_enable_http_auth_base">
+                    <t-radio value="0">{{$t('common.off')}}</t-radio>
+                    <t-radio value="1">{{$t('common.on')}}</t-radio>
+                  </t-radio-group>
+                </t-tooltip>
+              </t-form-item>
+              <t-form-item >
+                <http-auth-base  :propHostCode="formData.code"></http-auth-base>
+              </t-form-item>
+            </t-tab-panel>
+
           </t-tabs>
 
           <t-form-item style="float: right;margin-top:5px">
@@ -530,6 +548,23 @@
                 </t-tooltip>
               </t-form-item>
             </t-tab-panel>
+            <t-tab-panel :value="5">
+              <template #label>
+                {{$t('page.host.tab_password')}}
+              </template>
+              <t-form-item :label="$t('page.host.is_enable_http_auth_base')" name="is_enable_http_auth_base">
+                <t-tooltip class="placement top center" :content="$t('page.host.is_enable_http_auth_base_tips')" placement="top"
+                           :overlay-style="{ width: '200px' }" show-arrow>
+                  <t-radio-group v-model="formEditData.is_enable_http_auth_base">
+                    <t-radio value="0">{{$t('common.off')}}</t-radio>
+                    <t-radio value="1">{{$t('common.on')}}</t-radio>
+                  </t-radio-group>
+                </t-tooltip>
+              </t-form-item>
+              <t-form-item >
+                <http-auth-base  :propHostCode="formEditData.code"></http-auth-base>
+              </t-form-item>
+            </t-tab-panel>
           </t-tabs>
           <t-form-item style="float: right;margin-top:5px">
             <t-button variant="outline" @click="onClickCloseEditBtn">{{ $t('common.close') }}</t-button>
@@ -631,6 +666,7 @@ import {
   START_STATUS
 } from '@/constants';
 import LoadBalance from "../loadbalance/index.vue";
+import HttpAuthBase from "../http_auth_base/index.vue"
 
 const INITIAL_DATA = {
   host: 'www.baidu.com',
@@ -655,6 +691,7 @@ const INITIAL_DATA = {
   bind_more_host:'',//多域名情况
   is_trans_back_domain:"0",//是否传递后端域名
   bind_more_port:'',//多端口情况
+  is_enable_http_auth_base:"0",//是否激活Http Auth Base认证
 };
 const INITIAL_SSL_DATA = {
   cert_content: '',
@@ -665,11 +702,12 @@ const INITIAL_SSL_DATA = {
 export default Vue.extend({
   name: 'ListBase',
   components: {
-    SslOrderList,
-    LoadBalance,
     SearchIcon,
     FileSafetyIcon,
-    LinkIcon
+    LinkIcon,
+    SslOrderList,
+    LoadBalance,
+    HttpAuthBase,
   },
   data() {
     return {
@@ -1168,6 +1206,8 @@ export default Vue.extend({
             detail_data_tmp.unrestricted_port = detail_data_tmp.unrestricted_port.toString()
             detail_data_tmp.auto_jump_https = detail_data_tmp.auto_jump_https.toString()
             detail_data_tmp.is_trans_back_domain = detail_data_tmp.is_trans_back_domain.toString()
+            detail_data_tmp.is_enable_http_auth_base = detail_data_tmp.is_enable_http_auth_base.toString()
+
             that.formData= {
               ...detail_data_tmp
             }
@@ -1230,6 +1270,8 @@ export default Vue.extend({
         postdata['load_balance_stage'] = Number(postdata['load_balance_stage'])
         postdata['auto_jump_https'] = Number(postdata['auto_jump_https'])
         postdata['is_trans_back_domain'] = Number(postdata['is_trans_back_domain'])
+        postdata['is_enable_http_auth_base'] = Number(postdata['is_enable_http_auth_base'])
+
         let defenseData = {
           bot: parseInt(this.hostDefenseData.bot),
           sqli: parseInt(this.hostDefenseData.sqli),
@@ -1284,6 +1326,7 @@ export default Vue.extend({
         postdata['load_balance_stage'] = Number(postdata['load_balance_stage'])
         postdata['auto_jump_https'] = Number(postdata['auto_jump_https'])
         postdata['is_trans_back_domain'] = Number(postdata['is_trans_back_domain'])
+        postdata['is_enable_http_auth_base'] = Number(postdata['is_enable_http_auth_base'])
         if(postdata['ssl'] ==0){
           postdata['auto_jump_https'] = 0
         }
@@ -1423,6 +1466,7 @@ export default Vue.extend({
             that.detail_data.load_balance_stage = that.detail_data.load_balance_stage.toString()
             that.detail_data.auto_jump_https = that.detail_data.auto_jump_https.toString()
             that.detail_data.is_trans_back_domain = that.detail_data.is_trans_back_domain.toString()
+            that.detail_data.is_enable_http_auth_base = that.detail_data.is_enable_http_auth_base.toString()
             that.formEditData = {
               ...that.detail_data
             }

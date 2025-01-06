@@ -3,38 +3,33 @@
     <t-card class="list-card-container">
       <t-row justify="space-between">
         <div class="left-operation-container">
-
         </div>
         <div >
-          <t-form ref="form" :data="searchformData" :label-width="90" layout="inline" colon >
-            <t-form-item :label="$t('page.host.loadbalance.remote_ip')" name="remote_ip">
-              <t-input v-model="searchformData.remote_ip"  :placeholder="$t('common.placeholder')" clearable>
-              </t-input>
-            </t-form-item>
-            <t-form-item :label="$t('page.host.loadbalance.remote_port')" name="remote_port">
-              <t-input v-model="searchformData.remote_port"  :placeholder="$t('common.placeholder')" clearable>
-              </t-input>
-            </t-form-item>
-            <t-form-item >
-              <t-button theme="default"  @click="handleAdd">
-                <add-icon slot="icon" />
-                {{ $t('page.host.loadbalance.label_add_loadbalance') }} </t-button>
-              <t-button theme="default"   @click="getList('all')">
-                  <search-icon slot="icon" />
-                  {{ $t('common.search') }} </t-button>
-            </t-form-item>
-          </t-form>
+            <t-form ref="form" :data="searchformData" :label-width="100" layout="inline" colon :style="{ marginBottom: '8px' }">
+              <t-form-item :label="$t('page.http_auth_base.user_name')" name="user_name">
+                <t-input v-model="searchformData.user_name"  :placeholder="$t('common.placeholder')" clearable>
+                </t-input>
+              </t-form-item>
+              <t-form-item>
+                <t-button  theme="default"  @click="handleAdd">  <add-icon slot="icon" /> {{ $t('page.http_auth_base.button_add_http_auth_base') }} </t-button>
+
+                <t-button theme="default"  :style="{ marginLeft: '8px' }" @click="getList('all')">
+                    <search-icon slot="icon" />{{ $t('common.search') }}
+                  </t-button>
+               </t-form-item>
+             </t-form>
         </div>
       </t-row>
+      <t-alert theme="info" :message="$t('page.http_auth_base.alert_message')" close>
+        <template #operation>
+          <span @click="handleJumpOnlineUrl">{{ $t('common.online_document') }}</span>
+        </template>
+      </t-alert>
       <div class="table-container">
         <t-table :columns="columns" :data="data" :rowKey="rowKey" :verticalAlign="verticalAlign" :hover="hover"
           :pagination="pagination" :selected-row-keys="selectedRowKeys" :loading="dataLoading"
           @page-change="rehandlePageChange" @change="rehandleChange" @select-change="rehandleSelectChange"
-          :headerAffixedTop="true" :headerAffixProps="{ offsetTop: offsetTop }">
-
-         <template #host_code="{ row }">
-            <span> {{host_dic[row.host_code]}}</span>
-          </template>
+          :headerAffixedTop="true" :headerAffixProps="{ offsetTop: offsetTop, container: getContainer }">
 
           <template #op="slotProps">
             <a class="t-button-link" @click="handleClickEdit(slotProps)">{{ $t('common.edit') }}</a>
@@ -42,26 +37,23 @@
           </template>
         </t-table>
       </div>
-
+      <div>
+      <router-view></router-view>
+      </div>
     </t-card>
 
 
     <t-dialog :header="$t('common.new')" :visible.sync="addFormVisible" :width="680" :footer="false">
       <div slot="body">
         <t-form :data="formData" ref="form" :rules="rules" @submit="onSubmit" :labelWidth="100">
-          <t-form-item :label="$t('page.host.loadbalance.remote_ip')" name="remote_ip">
-            <t-input :style="{ width: '480px' }" v-model="formData.remote_ip" ></t-input>
-          </t-form-item>
-          <t-form-item :label="$t('page.host.loadbalance.remote_port')" name="remote_port">
-            <t-input-number :style="{ width: '480px' }" v-model="formData.remote_port" min="1" max="65535"></t-input-number>
-          </t-form-item>
-          <t-form-item :label="$t('page.host.loadbalance.weight')" name="weight" >
-            <t-input-number :style="{ width: '480px' }" v-model="formData.weight" min="1" defaultValue="5"  max="10"></t-input-number>
-          </t-form-item>
-          <t-form-item :label="$t('common.remarks')" name="remarks">
-            <t-textarea :style="{ width: '480px' }" v-model="formData.remarks"  name="remarks">
-            </t-textarea>
-          </t-form-item>
+           <t-form-item :label="$t('page.http_auth_base.user_name')" name="user_name">
+                 <t-input :style="{ width: '480px' }" v-model="formData.user_name" ></t-input>
+            </t-form-item>
+
+           <t-form-item :label="$t('page.http_auth_base.password')" name="password">
+                 <t-input type="password" :style="{ width: '480px' }" v-model="formData.password" ></t-input>
+           </t-form-item>
+
           <t-form-item style="float: right">
             <t-button variant="outline" @click="onClickCloseBtn">{{ $t('common.close') }}</t-button>
             <t-button theme="primary" type="submit">{{ $t('common.confirm') }}</t-button>
@@ -73,18 +65,12 @@
     <t-dialog :header="$t('common.edit')" :visible.sync="editFormVisible" :width="680" :footer="false">
       <div slot="body">
         <t-form :data="formEditData" ref="form" :rules="rules" @submit="onSubmitEdit" :labelWidth="100">
-         <t-form-item :label="$t('page.host.loadbalance.remote_ip')" name="remote_ip">
-           <t-input :style="{ width: '480px' }" v-model="formEditData.remote_ip"></t-input>
-         </t-form-item>
-          <t-form-item :label="$t('page.host.loadbalance.remote_port')" name="remote_port">
-            <t-input-number :style="{ width: '480px' }" v-model="formEditData.remote_port" min="1" max="65535"></t-input-number>
+           <t-form-item :label="$t('page.http_auth_base.user_name')" name="user_name">
+               <t-input :style="{ width: '480px' }" v-model="formEditData.user_name" ></t-input>
           </t-form-item>
-          <t-form-item :label="$t('page.host.loadbalance.weight')" name="weight">
-            <t-input-number :style="{ width: '480px' }" v-model="formEditData.weight" min="1" defaultValue="5"  max="10"></t-input-number>
-          </t-form-item>
-          <t-form-item :label="$t('common.remarks')" name="remarks">
-            <t-textarea :style="{ width: '480px' }" v-model="formEditData.remarks"  name="remarks">
-            </t-textarea>
+
+            <t-form-item :label="$t('page.http_auth_base.password')" name="password">
+               <t-input type="password" :style="{ width: '480px' }" v-model="formEditData.password" ></t-input>
           </t-form-item>
           <t-form-item style="float: right">
             <t-button variant="outline" @click="onClickCloseEditBtn">{{ $t('common.close') }}</t-button>
@@ -113,22 +99,21 @@
   } from '@/apis/host';
 
   import {
-    wafLoadBalanceDetailApi,wafLoadBalanceListApi,wafLoadBalanceEditApi,wafLoadBalanceDelApi,wafLoadBalanceAddApi
-  } from '@/apis/loadbalance';
-
+    wafHttpAuthBaseListApi,wafHttpAuthBaseDelApi,wafHttpAuthBaseEditApi,wafHttpAuthBaseAddApi,wafHttpAuthBaseDetailApi
+  } from '@/apis/http_auth_base.ts';
 
   const INITIAL_DATA = {
-    remote_ip: '',
-    remote_port: 0,
-    weight: 5,
-    remarks: '',
+    host_code:'',
+    user_name:'',
+    password:'',
+
   };
   export default Vue.extend({
-    name: 'LoadBalance',
+    name: 'HttpAuthBaseBase',
     components: {
       SearchIcon,
+      AddIcon,
       Trend,
-      AddIcon
     },
     props: {
       propHostCode: String,
@@ -146,16 +131,34 @@
           ...INITIAL_DATA
         },
         rules: {
-          host_code: [{
+
+           host_code: [{
+                  required: true,
+                  message: this.$t('common.placeholder')+this.$t('page.http_auth_base.host_code'),
+                  type: 'error'
+            }],
+
+           user_name: [{
+                  required: true,
+                  message: this.$t('common.placeholder')+this.$t('page.http_auth_base.user_name'),
+                  type: 'error'
+            }],
+          password: [{
             required: true,
-            message: this.$t('common.placeholder')+this.$t('page.host.loadbalance.website'),
+            message: this.$t('common.placeholder')+this.$t('page.http_auth_base.password'),
             type: 'error'
-          }],
-          remote_ip: [{
-            required: true,
-            message: this.$t('common.placeholder')+this.$t('page.host.loadbalance.remote_ip'),
-            type: 'error'
-          }],
+          }, {
+            validator: (val) => {
+              if (val.includes(":")){
+                return false
+              }else{
+                return true
+              }
+            },
+            message: this.$t('page.http_auth_base.password_validation'),
+            type: 'error',
+          },
+          ],
         },
         textareaValue: '',
         prefix,
@@ -165,40 +168,22 @@
         selectedRowKeys: [],
         value: 'first',
         columns: [
-          /*{
-            title: this.$t('page.host.loadbalance.website'),
-            width: 150,
-            ellipsis: true,
-            colKey: 'host_code',
-          },*/
-          {
-            title: this.$t('page.host.loadbalance.remote_ip'),
-            width: 150,
-            ellipsis: true,
-            colKey: 'remote_ip',
+          { title: this.$t('page.http_auth_base.user_name'),
+                    width: 200,
+                    ellipsis: true,
+                    colKey: 'user_name',
           },
           {
-            title: this.$t('page.host.loadbalance.remote_port'),
-            width: 100,
+            title: this.$t('common.create_time'),
+            width: 200,
             ellipsis: true,
-            colKey: 'remote_port',
-          },
-          {
-            title: this.$t('page.host.loadbalance.weight'),
-            width: 50,
-            ellipsis: true,
-            colKey: 'weight',
-          },
-          {
-            title: this.$t('common.remarks'),
-            width: 50,
-            ellipsis: true,
-            colKey: 'remarks',
+            colKey: 'create_time',
+            sorter: true
           },
           {
             align: 'left',
             fixed: 'right',
-            width: 100,
+            width: 200,
             colKey: 'op',
             title: this.$t('common.op'),
           },
@@ -217,8 +202,7 @@
         //顶部搜索
         searchformData: {
           host_code:"",
-          remote_ip:"",
-          remote_port:""
+          user_name:"",
         },
         //索引区域
         deleteIdx: -1,
@@ -280,20 +264,17 @@
       },
       getList(keyword) {
         let that = this
-        let postdata = {
-          pageSize: that.pagination.pageSize,
-          pageIndex: that.pagination.current,
-          ...that.searchformData
-        }
-        postdata['remote_port'] = Number(postdata['remote_port'])
-        console.log('getList',postdata)
-        wafLoadBalanceListApi( {...postdata})
+        wafHttpAuthBaseListApi( {
+              pageSize: that.pagination.pageSize,
+              pageIndex: that.pagination.current,
+              ...that.searchformData
+          })
           .then((res) => {
             let resdata = res
             console.log(resdata)
             if (resdata.code === 0) {
 
-              this.data = resdata.data.list;
+              this.data = resdata.data.list??[];
               this.data_attach = []
               console.log('getList',this.data)
               this.pagination = {
@@ -337,7 +318,7 @@
       },
       handleAdd() {
         this.addFormVisible = true
-        this.formData = {...INITIAL_DATA};
+        this.formData = { ...INITIAL_DATA };
         this.formData.host_code = this.propHostCode
       },
       onSubmit({
@@ -350,9 +331,7 @@
           let postdata = {
             ...that.formData
           }
-          postdata['remote_port'] = Number(postdata['remote_port'])
-          postdata['weight'] = Number(postdata['weight'])
-          wafLoadBalanceAddApi({...postdata})
+          wafHttpAuthBaseAddApi({...postdata})
             .then((res) => {
               let resdata = res
               console.log(resdata)
@@ -384,9 +363,7 @@
           let postdata = {
             ...that.formEditData
           }
-          postdata['remote_port'] = Number(postdata['remote_port'])
-          postdata['weight'] = Number(postdata['weight'])
-          wafLoadBalanceEditApi({...postdata})
+          wafHttpAuthBaseEditApi({...postdata})
             .then((res) => {
               let resdata = res
               console.log(resdata)
@@ -428,13 +405,14 @@
           id
         } = this.data[this.deleteIdx]
         let that = this
-        wafLoadBalanceDelApi({
+        wafHttpAuthBaseDelApi({
               id: id
           })
           .then((res) => {
             let resdata = res
             console.log(resdata)
             if (resdata.code === 0) {
+
               that.getList("")
               that.$message.success(resdata.msg);
             } else {
@@ -457,7 +435,7 @@
       },
       getDetail(id) {
         let that = this
-        wafLoadBalanceDetailApi({
+        wafHttpAuthBaseDetailApi({
               id: id
           })
           .then((res) => {
@@ -474,6 +452,9 @@
             console.log(e);
           })
           .finally(() => {});
+      },
+      handleJumpOnlineUrl(){
+        window.open(this.samwafglobalconfig.getOnlineUrl()+"/guide/HttpAuthBase.html");
       },
     },
   });

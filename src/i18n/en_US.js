@@ -11,6 +11,7 @@ export default {
     cancel: "Cancel",
     close: "Close",
     search: "Search",
+    refresh:"Refresh",
     all: "All",
     details: "Details",
     new: "New",
@@ -31,6 +32,7 @@ export default {
     confirm_delete: "Confirm delete the selected data?",
     data_delete_warning: "After deletion, the data will be removed and cannot be recovered",
     create_time: "Creation Time",
+    update_time: "Update Time",
     op: "Operation Content",
     date: "Date",
     online_document: "Online Document",
@@ -122,6 +124,7 @@ export default {
       sslconfig:"SSL Folder",
       batchtask:"Batch Task",
       sslorder:"SSL Apply Result",
+      ssl_expire:"SSL Expire Check",
     },
     analysis:{
       parent_title: "Data Analysis",
@@ -314,6 +317,7 @@ export default {
       tab_engine: "Engine Built-in Protection",
       tab_other: "Other Configurations",
       tab_more_domain:"Bind More Domain",
+      tab_password:"Web Password Visit",
       more_domain:"Bind More Domain",
       more_domain_tips:"Enter multiple domain names, each on a new line, without including the port.",
       start_status: "Start Status",
@@ -404,6 +408,8 @@ export default {
         label_autu_jump_https_off: "Off",
         autu_jump_https_tip:"If enabled, SamWaf will force automatic redirection to HTTPS; if disabled, SamWaf will not perform automatic redirection."
       },
+      is_enable_http_auth_base:"Web Password Visit",
+      is_enable_http_auth_base_tips: "After enabled, the website will require a password for access. Please add a username and password."
     },
     one_key_mod: {
       one_key_placeholder: "Due to the fact that only one program can use Web (port 80, port 443) on a single server, if you need to set Waf as a proxy, you need to change 80 to 81 and 443 to 444 here.\nSamWaf has added a one-click modification of Baota Web port for user convenience. Available only on Linux.",
@@ -545,6 +551,25 @@ export default {
         http01: "File Verification Method",
       },
       error_domain_not_match_method: "Wildcard domains are not allowed under the file verification method",
+    },
+    ssl_expire:{
+      alert_message: "SamWaf domain certificate expiration check, scheduled to check all domains once every day at midnight.",
+      button_add_ssl_expire: "New",
+      button_check:"Check",
+      button_sync_host:"Sync Exist Host",
+      domain: "Domain",
+      port: "Port",
+      valid_to:"Valid Time",
+      visit_log: "VisitLog",
+      status: "Status",
+    },
+    http_auth_base:{
+      alert_message: "After enabled website password, please access with the password.",
+      button_add_http_auth_base: "New",
+      host_code: "Host",
+      user_name: "UserName",
+      password: "Password",
+      password_validation:"Password Not Normal"
     },
     syslog: {
       syslog: "System Log",

@@ -11,6 +11,7 @@ export default {
     cancel:"取消",
     close:"关闭",
     search:"查询",
+    refresh:"刷新",
     all:"全部",
     details: "详情",
     new: "新建",
@@ -31,6 +32,7 @@ export default {
     confirm_delete: "确认删除当前所选数据?",
     data_delete_warning: "删除后，数据将被删除，且无法恢复",
     create_time: "创建时间",
+    update_time: "更新时间",
     op: "操作内容",
     date:"日期",
     online_document:"在线文档",
@@ -122,6 +124,7 @@ export default {
       sslconfig:"证书夹",
       batchtask:"批量任务",
       sslorder:"证书申请记录",
+      ssl_expire:"证书过期批量检测",
     },
     analysis:{
       parent_title:"数据分析",
@@ -315,6 +318,7 @@ export default {
       tab_engine:"引擎自带防护",
       tab_other:"其他配置",
       tab_more_domain:"绑定多个域名",
+      tab_password:"网站密码访问",
       more_domain:"同时绑定多个域名",
       more_domain_tips:"填写多个域名回车换行,不要加端口",
       start_status: "启动状态",
@@ -405,6 +409,8 @@ export default {
         label_autu_jump_https_off: "关闭",
         autu_jump_https_tip:"如果启用，那么SamWaf将强制自动跳转到https，如果关闭，那么SamWaf将不会自动跳转"
       },
+      is_enable_http_auth_base:"网站密码访问",
+      is_enable_http_auth_base_tips:"开启后该网站都是使用密码进行访问，并请添加帐号和密码",
     },
     one_key_mod:{
       one_key_placeholder: "由于单台服务器只能一个程序使用Web(80端口，443端口)，所以如果需要让Waf变为前置，那么此处需要将80=》81 ，443=》444。\n" +
@@ -548,6 +554,25 @@ export default {
         http01: "文件验证方式",
       },
       error_domain_not_match_method: "文件选择方式下不能是泛域名",
+    },
+    ssl_expire:{
+      alert_message: "SamWaf 域名证书检测到期情况，每天凌晨定时检测一次全部的域名",
+      button_add_ssl_expire: "新建",
+      button_check:"检测",
+      button_sync_host:"同步已存在的主机信息",
+      domain: "域名",
+      port: "端口",
+      visit_log: "访问记录",
+      valid_to:"过期时间",
+      status: "状态",
+    },
+    http_auth_base:{
+      alert_message: "开启网站密码后，请使用密码访问",
+      button_add_http_auth_base: "新建",
+      host_code: "网站",
+      user_name: "用户名",
+      password: "密码",
+      password_validation:"密码不合法"
     },
     syslog:{
       syslog:"系统日志",
