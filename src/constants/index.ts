@@ -16,6 +16,7 @@ export const GUARD_STATUS = {
 export const SSL_STATUS = {
   NOT_SSL: 0,
   SSL: 1,
+  TCP_PORT: 2,
 };
 
 // 启动状态枚举

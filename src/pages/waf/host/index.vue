@@ -54,6 +54,7 @@
           <template #ssl="{ row }">
             <p v-if="row.ssl === SSL_STATUS.NOT_SSL">{{ $t('page.host.ssl_no') }}</p>
             <p v-if="row.ssl === SSL_STATUS.SSL">{{ $t('page.host.ssl_yes') }}</p>
+            <p v-if="row.ssl === SSL_STATUS.TCP_PORT">{{ $t('page.host.port_tcp') }}</p>
           </template>
           <template #op="slotProps">
             <a class="t-button-link" v-if="slotProps.row.global_host!==1" @click="handleClickCopy(slotProps)">{{ $t('common.copy') }}</a>
@@ -106,6 +107,7 @@
                   <t-radio-group v-model="formData.ssl">
                     <t-radio value="0">{{ $t('page.host.ssl_option_no') }}</t-radio>
                     <t-radio value="1">{{ $t('page.host.ssl_option_yes') }}</t-radio>
+                    <t-radio value="2">{{ $t('page.host.port_option_tcp') }}</t-radio>
                   </t-radio-group>
                 </t-tooltip>
               </t-form-item>
@@ -179,7 +181,7 @@
               <t-form-item   name="loadbalance"  v-if="formData.is_enable_load_balance=='1'">
                 <load-balance :propHostCode="formData.code"></load-balance>
               </t-form-item>
-              <t-form-item :label="$t('page.host.remote_host')" name="remote_host">
+              <t-form-item :label="$t('page.host.remote_host')" name="remote_host" v-if="formData.ssl == '0' && formData.ssl=='1'">
                 <t-tooltip
                   class="placement top center"
                   :content="$t('page.host.remote_host_content')"
@@ -342,9 +344,10 @@
                 </t-tooltip>
               </t-form-item>
               <t-form-item :label="$t('page.host.ssl')" name="ssl">
-                <t-radio-group v-model="formEditData.ssl">
+                <t-radio-group v-model="formEditData.ssl" @change="getType1">
                   <t-radio value="0">{{ $t('page.host.ssl_option_no') }}</t-radio>
                   <t-radio value="1">{{ $t('page.host.ssl_option_yes') }}</t-radio>
+                  <t-radio value="2">{{ $t('page.host.port_option_tcp') }}</t-radio>
                 </t-radio-group>
               </t-form-item>
               <t-form-item :label="$t('page.host.ssl_folder')" name="bind_ssl_id" v-if="formEditData.ssl=='1'">
@@ -399,7 +402,7 @@
               <t-form-item   name="loadbalance"  v-if="formEditData.is_enable_load_balance=='1'">
                 <load-balance :propHostCode="formEditData.code"></load-balance>
               </t-form-item>
-              <t-form-item :label="$t('page.host.remote_host')" name="remote_host">
+              <t-form-item :label="$t('page.host.remote_host')" name="remote_host" v-if="formEditData.ssl=='0' || formEditData.ssl=='1'">
                 <t-tooltip
                   class="placement top center"
                   :content="$t('page.host.remote_host_content')"
@@ -409,7 +412,7 @@
                   <t-input :style="{ width: '480px' }" v-model="formEditData.remote_host" :placeholder="$t('common.placeholder')+$t('page.host.remote_host')"></t-input>
                 </t-tooltip>
               </t-form-item>
-              <t-form-item :label="$t('page.host.is_trans_back_domain')" name="is_trans_back_domain">
+              <t-form-item :label="$t('page.host.is_trans_back_domain')" name="is_trans_back_domain" v-if="formEditData.ssl=='0' || formEditData.ssl=='1'">
                 <t-tooltip
                   class="placement top center"
                   :content="$t('page.host.is_trans_back_domain_content')"
@@ -755,6 +758,12 @@ export default Vue.extend({
           type: 'error'
         }],
       },
+      getType1(){
+        if (this.formEditData.ssl === "2") {
+          console.log(this.formEditData.ssl)
+
+        }
+      },
       sslrules: {
         cert_content: [
           {
@@ -1015,6 +1024,7 @@ export default Vue.extend({
     };
   },
   computed: {
+
     confirmBody() {
       if (this.deleteIdx > -1) {
         const {
