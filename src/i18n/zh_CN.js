@@ -146,6 +146,7 @@ export default {
       system_config_title:"参数设置",
       system_runtime_title:"运行参数",
       system_one_key_modify_title:"一键修改",
+      task:"任务管理",
     },
     pc:{
       parent_title:"设备管理",
@@ -340,6 +341,8 @@ export default {
       remarks: "备注",
       exclude_url_log: "记录日志时排除URL",
       exclude_url_log_tips: "记录日志时排除URL开头的数据",
+      response_time_out: "响应超时时间(单位秒)",
+      response_time_out_tips: "如果填写0则无限等待，不建议",
       bot_detection: "Bot检测",
       bot_detection_tips: "检测搜索引擎是否是伪装的",
       sql_injection_detection: "Sql注入检测",
@@ -365,6 +368,10 @@ export default {
       file_upload_success: "文件上传成功",
       file_upload_fail: "文件上传失败",
       file_safety: "文件安全",
+      upload:{
+        import_auto_create_code:"导入新增主机编码(适用全新数据)",
+        import_remain_code:"导入保留主机编码(适用老数据数据)",
+      },
       back_system_type_baota:"宝塔",
       back_system_type_phpstudy:"小皮面板(phpstudy)",
       back_system_type_phpnow:"PHPnow",
@@ -573,6 +580,22 @@ export default {
       user_name: "用户名",
       password: "密码",
       password_validation:"密码不合法"
+    },
+    task:{
+      alert_message: "SamWaf 任务管理",
+      button_add_task: "新建",
+      button_manual_execute: "手工执行",
+      task_name: "任务名",
+      task_unit: "间隔单位",
+      task_value: "值",
+      task_at: "具体时刻",
+      task_method: "内部标识",
+      task_unit_type:{
+        second:"每秒",
+        minute:"每分钟",
+        hour:"每小时",
+        day:"每天",
+      }
     },
     syslog:{
       syslog:"系统日志",

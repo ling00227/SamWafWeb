@@ -43,7 +43,7 @@ export default {
       forbid: "Forbid",
     },
     on: "On",
-    off: "Off"
+    off: "Off",
   },
   login:{
     login_title: "Login",
@@ -146,6 +146,7 @@ export default {
       system_config_title: "Parameter Settings",
       system_runtime_title: "Runtime Parameters",
       system_one_key_modify_title: "Quick Modification",
+      task:"Task Manager",
     },
     pc:{
       parent_title: "Device",
@@ -339,6 +340,8 @@ export default {
       remarks: "Remarks",
       exclude_url_log: "Exclude URL When Logging",
       exclude_url_log_tips: "Exclude URL prefix data when logging",
+      response_time_out: "Response timeout (in seconds)",
+      response_time_out_tips: "If set to 0, it will wait indefinitely, which is not recommended.",
       bot_detection: "Bot Detection",
       bot_detection_tips: "Detect if search engines are disguised",
       sql_injection_detection: "SQL Injection Detection",
@@ -364,6 +367,10 @@ export default {
       file_upload_success: "File uploaded successfully",
       file_upload_fail: "File upload failed",
       file_safety: "File Safety",
+      upload:{
+        import_auto_create_code:"Import new host code (for new data)",
+        import_remain_code:"Import retained host code (for old data)",
+      },
       back_system_type_baota: "Baota",
       back_system_type_phpstudy: "Xiao Pi Panel (phpstudy)",
       back_system_type_phpnow: "PHPnow",
@@ -570,6 +577,22 @@ export default {
       user_name: "UserName",
       password: "Password",
       password_validation:"Password Not Normal"
+    },
+    task:{
+      alert_message: "SamWaf Task",
+      button_add_task: "New",
+      button_manual_execute: "Manual Execute",
+      task_name: "TaskName",
+      task_unit: "TaskUnit",
+      task_value: "TaskValue",
+      task_at: "TaskAt",
+      task_method: "TaskMethod",
+      task_unit_type:{
+        second:"Second",
+        minute:"Minute",
+        hour:"Hour",
+        day:"Day",
+      }
     },
     syslog: {
       syslog: "System Log",
