@@ -31,7 +31,7 @@
             <t-input v-model="searchformData.src_ip" class="form-item-content" :placeholder="$t('common.placeholder')+$t('page.visit_log.source_ip')"
                      :style="{ minWidth: '100px' }" />
           </t-form-item>
-          <t-form-item :label="$t('page.visit_log.access_date')" name="unix_add_time">
+          <t-form-item :label="$t('page.visit_log.access_date')" name="unix_add_time" v-if="attack_ip==''">
             <t-date-range-picker v-model="dateControl.range1" :presets="dateControl.presets" enable-time-picker valueType="YYYY-MM-DD HH:mm:ss" />
           </t-form-item>
           <t-form-item :label="$t('page.visit_log.access_method')" name="method">
@@ -47,7 +47,7 @@
           </t-form-item>
           <t-form-item>
             <t-button theme="primary" :style="{ marginLeft: '8px' }" @click="getList('all')"> {{ $t('common.search') }} </t-button>
-            <t-button theme="primary" :style="{ marginLeft: '8px' }" @click="exportDbVisible=true"> {{ $t('common.export') }} </t-button>
+            <t-button theme="primary" :style="{ marginLeft: '8px' }" v-if="attack_ip==''" @click="exportDbVisible=true"> {{ $t('common.export') }} </t-button>
             <t-button type="reset" variant="base" theme="default"> {{ $t('common.reset') }}  </t-button>
           </t-form-item>
         </t-form>
@@ -81,7 +81,7 @@
             <t-tag v-if="row.rule !== ''" shape="round" theme="primary" variant="outline">{{row.rule}}</t-tag>
           </template>
           <template #op="slotProps">
-            <a class="t-button-link" @click="handleClickIPDetail(slotProps)">{{$t('common.search') + $t('page.visit_log.source_ip') }}</a>
+            <a class="t-button-link" @click="handleClickIPDetail(slotProps)" v-if="attack_ip==''">{{$t('common.search') + $t('page.visit_log.source_ip') }}</a>
             <a class="t-button-link" @click="handleClickDetail(slotProps)">{{$t('common.details')}}</a>
           </template>
         </t-table>
@@ -97,6 +97,19 @@
       :onClose="() => { this.exportDbVisible = false}"
     >
     </t-dialog>
+
+
+    <t-dialog
+      :header="$t('page.visit_log.pop_detail_header')"
+      :visible.sync="visitDetailVisible"
+      width="80%"
+      :confirmOnEnter="true"
+      :onConfirm="() => { this.visitDetailVisible = false}"
+      :onClose="() => { this.visitDetailVisible = false}"
+    >
+      <visit-detail-page :prop_current_db="searchformData.current_db_name" :prop_req_uuid="visitDetailUid" ></visit-detail-page>
+    </t-dialog>
+
   </div>
 </template>
 <script lang="ts">
@@ -105,6 +118,7 @@
   import Trend from '@/components/trend/index.vue';
   import { prefix } from '@/config/global';
   import { allsharedblist,exportlog } from '@/apis/waflog/attacklog';
+  import VisitDetailPage from './detail/index.vue'
 
   import { NowDate, ConvertStringToUnix, ConvertDateToString, ConvertUnixToDate } from '@/utils/date';
   import {
@@ -134,10 +148,17 @@
   ];
 
   export default Vue.extend({
-    name: 'ListBase',
+    name: 'WebLogList',
     components: {
       SearchIcon,
       Trend,
+      VisitDetailPage
+    },
+    props: {
+      attack_ip:{
+        type: String,
+        default: ''
+      }
     },
     data() {
       return {
@@ -366,7 +387,7 @@
         },
         //排序字段
         sorts: {
-          sortBy:"create_time",
+          sortBy:"unix_add_time",
           descending:true,
         },
         //筛选字段
@@ -380,6 +401,8 @@
         share_db_dic: {},
         //export db
         exportDbVisible:false,
+        visitDetailVisible:false,//访问详情弹窗
+        visitDetailUid: "",//访问详情id
       };
     },
     computed: {
@@ -403,11 +426,11 @@
       console.log(NowDate)
       this.dateControl.range1[0] = NowDate + " 00:00:00"
       this.dateControl.range1[1] = NowDate + " 23:59:59"
-      this.searchformData.unix_add_time_begin = ConvertStringToUnix(this.dateControl.range1[0]).toString(),
-        this.searchformData.unix_add_time_end = ConvertStringToUnix(this.dateControl.range1[1]).toString(),
-        // unix_add_time_begin: ConvertStringToUnix(this.range1[0]).toString(),
-        //unix_add_time_end: ConvertStringToUnix(this.range1[1]).toString(),
-        console.log(this.range1)
+      this.searchformData.unix_add_time_begin = ConvertStringToUnix(this.dateControl.range1[0]).toString()
+      this.searchformData.unix_add_time_end = ConvertStringToUnix(this.dateControl.range1[1]).toString()
+      console.log(this.range1)
+
+
     },
     mounted() {
       console.log("attack list mounted ");
@@ -441,6 +464,11 @@
         this.searchformData.action = newVal
         this.getList("")
       },
+      attack_ip(newVal) {
+        if (newVal !== "") {
+          this.updateSearchFormAttackPage();  // 当 attack_ip 变化时，更新表单数据
+        }
+      }
     },
     beforeRouteLeave(to, from, next) {
       console.log("attack list beforeRouteLeave ");
@@ -454,6 +482,20 @@
       next(); // 继续后续的导航解析过程
     },
     methods: {
+      updateSearchFormAttackPage(){
+        console.log("updateSearchFormAttackPage")
+        if (this.attack_ip!=""){
+          console.log("attack ip index",this.attack_ip)
+          this.searchformData.src_ip = this.attack_ip
+          this.dateControl.range1[0] = "2022-01-01 00:00:00"
+          this.dateControl.range1[1] = NowDate + " 23:59:59"
+          this.searchformData.unix_add_time_begin = ConvertStringToUnix(this.dateControl.range1[0]).toString()
+          this.searchformData.unix_add_time_end = ConvertStringToUnix(this.dateControl.range1[1]).toString()
+          this.pagination.current = 1
+          this.getList("")
+        }
+
+      },
       loadShareDbList() {
         let that = this;
         allsharedblist("").then((res) => {
@@ -491,7 +533,7 @@
         });
       },
       getList(keyword) {
-
+        console.log("getList")
         let that = this
         if (keyword != undefined && keyword == "all") {
           that.pagination.current = 1
@@ -499,6 +541,7 @@
         that.searchformData.unix_add_time_begin = ConvertStringToUnix(this.dateControl.range1[0]).toString()
         that.searchformData.unix_add_time_end = ConvertStringToUnix(this.dateControl.range1[1]).toString()
 
+        console.log("getList searchformData",that.searchformData)
         let sort_descending =that.sorts.descending?"desc":"asc"
 
         this.$request
@@ -588,14 +631,21 @@
         console.log(e)
         const { req_uuid } = e.row
         console.log(req_uuid)
-        this.$router.push(
-          {
-            path: '/waf/wafattacklogdetail',
-            query: {
-              req_uuid: req_uuid+"#"+this.searchformData.current_db_name,
+
+        if(this.attack_ip==""){
+          this.$router.push(
+            {
+              path: '/waf/wafattacklogdetail',
+              query: {
+                req_uuid: req_uuid+"#"+this.searchformData.current_db_name,
+              },
             },
-          },
-        );
+          );
+        }else{
+          this.visitDetailUid = req_uuid
+          this.visitDetailVisible = true
+        }
+
       },
       handleClickIPDetail(e) {
         console.log(e)
@@ -640,7 +690,7 @@
           that.sorts.descending= sorter.descending
 
         }else{
-          that.sorts.sortBy="create_time"
+          that.sorts.sortBy="unix_add_time"
           that.sorts.descending= true
         }
         this.getList("")
@@ -672,7 +722,15 @@
           }
         }
         this.getList("")
-      }
+      },
+      resetState(){
+        console.log("来自上级得状态清理")
+        this.$refs.form.reset()
+        this.dateControl.range1[0] = NowDate + " 00:00:00"
+        this.dateControl.range1[1] = NowDate + " 23:59:59"
+        this.searchformData.unix_add_time_begin = ConvertStringToUnix(this.dateControl.range1[0]).toString()
+        this.searchformData.unix_add_time_end = ConvertStringToUnix(this.dateControl.range1[1]).toString()
+      },
       //end meathod
     },
   });
