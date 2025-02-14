@@ -15,6 +15,7 @@ export default {
     all: "All",
     details: "Details",
     new: "New",
+    add:"Add",
     copy: "Copy",
     edit: "Edit",
     delete: "Delete",
@@ -44,6 +45,10 @@ export default {
     },
     on: "On",
     off: "Off",
+    http_header:{
+      name:"Name",
+      value:"Value",
+    },
   },
   login:{
     login_title: "Login",
@@ -125,6 +130,7 @@ export default {
       batchtask:"Batch Task",
       sslorder:"SSL Apply Result",
       ssl_expire:"SSL Expire Check",
+      blocking_page:"Custom Blocking Page",
     },
     analysis:{
       parent_title: "Data Analysis",
@@ -538,6 +544,7 @@ export default {
       label_confirm_message: "Are you sure you want to trigger manually?",
       batch_type: {
         add_ipallow: "Add Whitelist IP",
+        add_ipdeny: "Add DenyList IP",
       },
       batch_source_type: {
         local: "Local Path",
@@ -583,6 +590,16 @@ export default {
       valid_to:"Valid Time",
       visit_log: "VisitLog",
       status: "Status",
+    },
+    blocking_page:{
+      alert_message: "SamWaf Custom Blocking Page",
+      button_add_blocking_page: "Create New",
+      blocking_page_name: "Custom Blocking Page Name",
+      blocking_type: "Custom Type",
+      host_code: "Website",
+      response_code: "Response Code",
+      response_header: "Response Header Information",
+      response_content: "Response Content",
     },
     http_auth_base:{
       alert_message: "After enabled website password, please access with the password.",
